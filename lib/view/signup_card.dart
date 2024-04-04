@@ -56,12 +56,6 @@ class SignupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return <Widget>[_buildSignupCard()]
-        .toColumn(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min)
-        .padding(horizontal: 10, vertical: 0)
-        .decorated(color: Colors.white)
-        .alignment(Alignment.center);
+    return _buildSignupCard();
   }
 }

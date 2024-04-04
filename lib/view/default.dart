@@ -1,62 +1,40 @@
-import 'package:aplikasi_history_absensi/view/login_card.dart';
-import 'package:aplikasi_history_absensi/view/signup_card.dart';
 import 'package:flutter/material.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class Default extends StatelessWidget {
-  const Default({super.key});
-
   @override
   Widget build(BuildContext context) {
-    page({required Widget child}) =>
-        Styled.widget(child: child).padding(vertical: 30, horizontal: 20);
-
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('TabBar in Body'),
-        ),
-        body: <Widget>[
-          TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.directions_car)),
-              Tab(icon: Icon(Icons.directions_transit)),
-              Tab(icon: Icon(Icons.directions_bike)),
-            ],
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 3, // Number of tabs
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('TabBar Demo'),
           ),
-          Expanded(
-            child: TabBarView(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                LoginCard(),
-                Icon(Icons.directions_transit),
-                Icon(Icons.directions_bike),
+                TabBar(
+                  tabs: [
+                    Tab(text: 'Tab 1'),
+                    Tab(text: 'Tab 2'),
+                    Tab(text: 'Tab 3'),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      Center(child: Text('Tab 1 Content')), // Widget for Tab 1
+                      Center(child: Text('Tab 2 Content')), // Widget for Tab 2
+                      Center(child: Text('Tab 3 Content')), // Widget for Tab 3
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ].toColumn().parent(page),
+        ),
       ),
     );
-  }
-}
-
-class FirstTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('First Tab'));
-  }
-}
-
-class SecondTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Second Tab'));
-  }
-}
-
-class ThirdTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Third Tab'));
   }
 }
