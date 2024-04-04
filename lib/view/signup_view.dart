@@ -1,11 +1,10 @@
-import 'package:aplikasi_history_absensi/view/login_card.dart';
+import 'package:aplikasi_history_absensi/view/signup_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +21,16 @@ class LoginPage extends StatelessWidget {
             size: 48,
           ),
           Text(
-            'Login',
+            'Sign Up',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
           ).alignment(Alignment.center).padding(bottom: 20),
-          LoginCard(),
+          SignupCard(),
           <Widget>[
             GestureDetector(
                 onTap: () {
-                  Get.toNamed("/signup");
+                  Get.offNamed("/login");
                 },
-                child: Text("Buat Akun"))
+                child: Text("Memiliki akun"))
           ].toRow(mainAxisAlignment: MainAxisAlignment.start).parent(page),
         ].toColumn(mainAxisAlignment: MainAxisAlignment.center).parent(page),
       ),

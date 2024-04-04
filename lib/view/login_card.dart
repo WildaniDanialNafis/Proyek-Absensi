@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class LoginCard extends StatelessWidget {
@@ -39,7 +40,9 @@ class LoginCard extends StatelessWidget {
           width: double.infinity,
           height: 60,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed("/profile");
+            },
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.black),
                 shape: MaterialStateProperty.all(const RoundedRectangleBorder(
@@ -56,12 +59,6 @@ class LoginCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return <Widget>[_buildLoginCard()]
-        .toColumn(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min)
-        .padding(horizontal: 10, vertical: 0)
-        .decorated(color: Colors.white)
-        .alignment(Alignment.center);
+    return _buildLoginCard();
   }
 }
