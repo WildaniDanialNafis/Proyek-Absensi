@@ -1,38 +1,237 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sidebarx/sidebarx.dart';
+
+class ExampleSidebarX extends StatelessWidget {
+  const ExampleSidebarX({
+    Key? key,
+    required SidebarXController controller,
+  })  : _controller = controller,
+        super(key: key);
+
+  final SidebarXController _controller;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  // You can add your functionality here for when the icon is pressed
-                },
-                child: Icon(
-                  Icons.abc,
-                  color: Colors.white,
+    return SidebarX(
+      controller: _controller,
+      theme: SidebarXTheme(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: canvasColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        hoverColor: scaffoldBackgroundColor,
+        textStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+        selectedTextStyle: const TextStyle(color: Colors.white),
+        itemTextPadding: const EdgeInsets.only(left: 30),
+        selectedItemTextPadding: const EdgeInsets.only(left: 30),
+        itemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: canvasColor),
+        ),
+        selectedItemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: actionColor.withOpacity(0.37),
+          ),
+          gradient: const LinearGradient(
+            colors: [accentCanvasColor, canvasColor],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.28),
+              blurRadius: 30,
+            )
+          ],
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white.withOpacity(0.7),
+          size: 20,
+        ),
+        selectedIconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
+      extendedTheme: const SidebarXTheme(
+        width: 250,
+        decoration: BoxDecoration(
+          color: canvasColor,
+        ),
+      ),
+      footerDivider: divider,
+      headerBuilder: (context, extended) {
+        return SizedBox(
+          height: 100,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SvgPicture.asset('images/burger.svg'),
+          ),
+        );
+      },
+      items: [
+        SidebarXItem(
+          icon: Icons.security,
+          label: 'Akun',
+          onTap: () {
+            debugPrint('Home');
+          },
+        ),
+        const SidebarXItem(
+          icon: Icons.nightlight,
+          label: 'Tema',
+        ),
+        const SidebarXItem(
+          icon: Icons.info,
+          label: 'Tentang Kami',
+        ),
+        const SidebarXItem(
+          icon: Icons.logout,
+          label: 'Keluar',
+        ),
+        const SidebarXItem(
+          iconWidget: FlutterLogo(size: 20),
+          label: 'Flutter',
+        ),
+      ],
+    );
+  }
+}
+
+class _ScreensExample extends StatelessWidget {
+  const _ScreensExample({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final SidebarXController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        final pageTitle = _getTitleByIndex(controller.selectedIndex);
+        switch (controller.selectedIndex) {
+          case 0:
+            return UserPage();
+          default:
+            return Text(
+              pageTitle,
+              style: theme.textTheme.headlineSmall,
+            );
+        }
+      },
+    );
+  }
+}
+
+String _getTitleByIndex(int index) {
+  switch (index) {
+    case 0:
+      return 'Home';
+    case 1:
+      return 'Search';
+    case 2:
+      return 'People';
+    case 3:
+      return 'Favorites';
+    case 4:
+      return 'Custom iconWidget';
+    case 5:
+      return 'Profile';
+    case 6:
+      return 'Settings';
+    default:
+      return 'Not found page';
+  }
+}
+
+const canvasColor = Color(0xff3977ff);
+const scaffoldBackgroundColor = Color(0xFF464667);
+const accentCanvasColor = Color.fromARGB(255, 19, 41, 87);
+const white = Colors.white;
+final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
+final divider = Divider(color: white.withOpacity(0.3), height: 1);
+
+class ProfilePage extends StatelessWidget {
+  ProfilePage({super.key});
+
+  final _controller = SidebarXController(selectedIndex: 0, extended: true);
+  final _key = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        final isSmallScreen = MediaQuery.of(context).size.width < 600;
+        return Scaffold(
+          key: _key,
+          appBar: isSmallScreen
+              ? AppBar(
+                  backgroundColor: canvasColor,
+                  title: Text(
+                    _getTitleByIndex(_controller.selectedIndex),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: IconButton(
+                      onPressed: () {
+                        _key.currentState?.openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : null,
+          drawer: ExampleSidebarX(controller: _controller),
+          body: Row(
+            children: [
+              if (!isSmallScreen) ExampleSidebarX(controller: _controller),
+              Expanded(
+                child: Center(
+                  child: _ScreensExample(
+                    controller: _controller,
+                  ),
                 ),
               ),
-            ),
-          ],
-          backgroundColor: Color(0xff3977ff),
-          title: Text(
-            "Home",
-            style: TextStyle(color: Colors.white),
+            ],
           ),
-        ),
-        body: SafeArea(child: UserPage()),
-      ),
+        );
+      },
     );
+
+    // Scaffold(
+    //   appBar: AppBar(
+    //     leading: Padding(
+    //       padding: EdgeInsets.only(left: 20.0),
+    //       child: IconButton(
+    //         onPressed: () {},
+    //         icon: SvgPicture.asset(
+    //           'images/burger.svg',
+    //         ),
+    //       ),
+    //     ),
+    //     backgroundColor: Color(0xff3977ff),
+    //     title: Text(
+    //       "Home",
+    //       style: TextStyle(color: Colors.white),
+    //     ),
+    //   ),
+    //   body: SafeArea(child: UserPage()),
+    // );
   }
 }
 
