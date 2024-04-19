@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,7 +23,6 @@ class ExampleSidebarX extends StatelessWidget {
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
-        margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: canvasColor,
           borderRadius: BorderRadius.circular(20),
@@ -66,13 +66,14 @@ class ExampleSidebarX extends StatelessWidget {
           color: canvasColor,
         ),
       ),
-      footerDivider: divider,
+      headerDivider: divider,
       headerBuilder: (context, extended) {
-        return SizedBox(
-          height: 100,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SvgPicture.asset('images/burger.svg'),
+        return Padding(
+          padding: const EdgeInsets.only(top: 33),
+          child: Text(
+            "Absen Aja!",
+            style: TextStyle(
+                fontSize: 38, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         );
       },
@@ -101,6 +102,15 @@ class ExampleSidebarX extends StatelessWidget {
           label: 'Flutter',
         ),
       ],
+      footerDivider: divider,
+      footerBuilder: ((context, extended) {
+        return Text(
+          "Created By: Militan",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        );
+      }),
     );
   }
 }
@@ -160,7 +170,11 @@ const scaffoldBackgroundColor = Color(0xFF464667);
 const accentCanvasColor = Color.fromARGB(255, 19, 41, 87);
 const white = Colors.white;
 final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
-final divider = Divider(color: white.withOpacity(0.3), height: 1);
+final divider = Divider(
+  color: white.withOpacity(0.3),
+  height: 5,
+  thickness: 1,
+);
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
@@ -297,9 +311,24 @@ class UserCard extends StatelessWidget {
         Text(text).textColor(Colors.white.withOpacity(0.6)).fontSize(12),
       ].toColumn();
 
+  Widget _buildProfileViewButton() {
+    return <Widget>[
+      ElevatedButton(
+          onPressed: () {
+            Get.toNamed("/profile/detail");
+          },
+          child: Text("Lihat Profil >>"),
+          style: ElevatedButton.styleFrom(side: BorderSide.none)),
+    ].toRow(mainAxisAlignment: MainAxisAlignment.center);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return <Widget>[_buildUserRow(), _buildUserStats()]
+    return <Widget>[
+      _buildUserRow(),
+      _buildUserStats(),
+      _buildProfileViewButton()
+    ]
         .toColumn(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(horizontal: 20, vertical: 10)
         .decorated(
@@ -309,7 +338,6 @@ class UserCard extends StatelessWidget {
           shadowColor: Color(0xff3977ff),
           borderRadius: BorderRadius.circular(20),
         )
-        .height(175)
         .alignment(Alignment.center);
   }
 }
